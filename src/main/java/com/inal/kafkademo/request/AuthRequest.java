@@ -12,7 +12,7 @@ public class AuthRequest extends Request {
     private Long currencyId;
     private BigDecimal merchantPayoutAmount;
     private BigDecimal subMerchantPayoutAmount;
-    private BigDecimal iyzicoPayoutAmount;
+    private BigDecimal companyPayoutAmount;
     private String merchantBasketItemId;
 
     public String getTransactionStatusDate() {
@@ -79,12 +79,12 @@ public class AuthRequest extends Request {
         this.subMerchantPayoutAmount = subMerchantPayoutAmount;
     }
 
-    public BigDecimal getIyzicoPayoutAmount() {
-        return iyzicoPayoutAmount;
+    public BigDecimal getCompanyPayoutAmount() {
+        return companyPayoutAmount;
     }
 
-    public void setIyzicoPayoutAmount(BigDecimal iyzicoPayoutAmount) {
-        this.iyzicoPayoutAmount = iyzicoPayoutAmount;
+    public void setCompanyPayoutAmount(BigDecimal companyPayoutAmount) {
+        this.companyPayoutAmount = companyPayoutAmount;
     }
 
     public String getMerchantBasketItemId() {
@@ -107,7 +107,7 @@ public class AuthRequest extends Request {
         sb.append(", currencyId=").append(currencyId);
         sb.append(", merchantPayoutAmount=").append(merchantPayoutAmount);
         sb.append(", subMerchantPayoutAmount=").append(subMerchantPayoutAmount);
-        sb.append(", iyzicoPayoutAmount=").append(iyzicoPayoutAmount);
+        sb.append(", companyPayoutAmount=").append(companyPayoutAmount);
         sb.append(", merchantBasketItemId='").append(merchantBasketItemId).append('\'');
         sb.append('}');
         return sb.toString();

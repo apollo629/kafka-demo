@@ -11,7 +11,7 @@ public class CancelRequest extends Request {
     private Long merchantId;
     private Long currencyId;
     private BigDecimal cancelAmount;
-    private BigDecimal iyzicoCancelAmount;
+    private BigDecimal companyCancelAmount;
     private String merchantBasketItemId;
 
     public Long getPaymentRefundId() {
@@ -70,12 +70,12 @@ public class CancelRequest extends Request {
         this.cancelAmount = cancelAmount;
     }
 
-    public BigDecimal getIyzicoCancelAmount() {
-        return iyzicoCancelAmount;
+    public BigDecimal getCompanyCancelAmount() {
+        return companyCancelAmount;
     }
 
-    public void setIyzicoCancelAmount(BigDecimal iyzicoCancelAmount) {
-        this.iyzicoCancelAmount = iyzicoCancelAmount;
+    public void setCompanyCancelAmount(BigDecimal companyCancelAmount) {
+        this.companyCancelAmount = companyCancelAmount;
     }
 
     public String getMerchantBasketItemId() {
@@ -97,7 +97,7 @@ public class CancelRequest extends Request {
         sb.append(", merchantId=").append(merchantId);
         sb.append(", currencyId=").append(currencyId);
         sb.append(", cancelAmount=").append(cancelAmount);
-        sb.append(", iyzicoCancelAmount=").append(iyzicoCancelAmount);
+        sb.append(", companyCancelAmount=").append(companyCancelAmount);
         sb.append(", merchantBasketItemId='").append(merchantBasketItemId).append('\'');
         sb.append('}');
         return sb.toString();
