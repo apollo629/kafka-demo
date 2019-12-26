@@ -1,0 +1,20 @@
+server.port: 8090
+spring:
+    kafka:
+        bootstrap-servers: 18.185.138.146:9092, 18.197.145.175:9092, 18.196.87.68:9092
+#        consumer:
+#            group-id: payment
+#            auto-offset-reset: earliest
+#            key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+#            value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+#        producer:
+#            key-serializer: org.apache.kafka.common.serialization.StringSerializer
+#            value-serializer: org.apache.kafka.common.serialization.StringSerializer
+    datasource:
+        url: jdbc:h2:mem:kafka-demo;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE;MVCC=TRUE
+        driver-class-name: org.h2.Driver
+        username: root
+        password: root
+    h2.console:
+        enabled: true
+        path: /h2
