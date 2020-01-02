@@ -6,7 +6,7 @@ import java.util.Date;
 
 @Entity
 @Table(name = "cutoff_merchant_tx")
-public class CutoffMerchantTx {
+public class CutOffMerchantTx {
 
     @Id
     @Column(name = "id")
@@ -38,6 +38,10 @@ public class CutoffMerchantTx {
 
     @Column(name = "currency_id", nullable = false)
     private Long currencyId;
+
+    @ManyToOne
+    @JoinColumn(name = "cutoff_merchant_id", referencedColumnName = "id")
+    private CutOffMerchant cutOffMerchant;
 
     public Long getId() {
         return id;
@@ -109,5 +113,13 @@ public class CutoffMerchantTx {
 
     public void setCurrencyId(Long currencyId) {
         this.currencyId = currencyId;
+    }
+
+    public CutOffMerchant getCutOffMerchant() {
+        return cutOffMerchant;
+    }
+
+    public void setCutOffMerchant(CutOffMerchant cutOffMerchant) {
+        this.cutOffMerchant = cutOffMerchant;
     }
 }
