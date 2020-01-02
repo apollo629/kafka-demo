@@ -37,11 +37,11 @@ public class CutoffMerchantTxService {
     }
 
     public void create(AuthRequest authMessage) {
-        Optional<CutOffMerchant> optionalCutOffMerchant = cutOffMerchantRepository.findByMerchantIdAndCurrencyIdAndStatusAndPayoutStatus(authMessage.getMerchantId(), authMessage.getCurrencyId(), 1, 10);
-        if (!optionalCutOffMerchant.isPresent()) {
-            try {
-                String key = generateKey(authMessage.getMerchantId(), authMessage.getCurrencyId());
-                lockService.lock(key);
+        try {
+            String key = generateKey(authMessage.getMerchantId(), authMessage.getCurrencyId());
+            lockService.lock(key);
+            Optional<CutOffMerchant> optionalCutOffMerchant = cutOffMerchantRepository.findByMerchantIdAndCurrencyIdAndStatusAndPayoutStatus(authMessage.getMerchantId(), authMessage.getCurrencyId(), 1, 10);
+            if (!optionalCutOffMerchant.isPresent()) {
                 CutOffMerchant cutOffMerchant = convertToCutOffMerchant(authMessage);
                 cutOffMerchantRepository.save(cutOffMerchant);
                 logger.info("CutOffMerchant is created with id: {}", cutOffMerchant.getId());
@@ -53,18 +53,19 @@ public class CutoffMerchantTxService {
 
                 cutOffMerchantRepository.updatePayoutAmountsById(authMessage.getMerchantPayoutAmount(), authMessage.getCompanyPayoutAmount(), cutOffMerchant.getId());
                 logger.info("CutOffMerchant payout amounts updated with id: {}", cutOffMerchant.getId());
-            } catch (LockedException e) {
-                logger.error("Cannot acquire lock to create cutoff merchant {}-{}", authMessage.getMerchantId(), authMessage.getCurrencyId(), e);
-                throw new RuntimeException(e);
-            }
-        } else {
-            CutOffMerchant cutOffMerchant = optionalCutOffMerchant.get();
-            CutOffMerchantTx cutoffMerchantTx = convertToCutoffMerchantTx(authMessage, cutOffMerchant);
-            CutOffMerchantTx savedCutOffMerchantTx = cutOffMerchantTxRepository.save(cutoffMerchantTx);
-            logger.info("CutoffMerchantTx is created with id: {}", savedCutOffMerchantTx.getId());
+            } else {
+                lockService.unlock(key);
+                CutOffMerchant cutOffMerchant = optionalCutOffMerchant.get();
+                CutOffMerchantTx cutoffMerchantTx = convertToCutoffMerchantTx(authMessage, cutOffMerchant);
+                CutOffMerchantTx savedCutOffMerchantTx = cutOffMerchantTxRepository.save(cutoffMerchantTx);
+                logger.info("CutoffMerchantTx is created with id: {}", savedCutOffMerchantTx.getId());
 
-            cutOffMerchantRepository.updatePayoutAmountsById(authMessage.getMerchantPayoutAmount(), authMessage.getCompanyPayoutAmount(), cutOffMerchant.getId());
-            logger.info("CutOffMerchant payout amounts updated with id: {}", cutOffMerchant.getId());
+                cutOffMerchantRepository.updatePayoutAmountsById(authMessage.getMerchantPayoutAmount(), authMessage.getCompanyPayoutAmount(), cutOffMerchant.getId());
+                logger.info("CutOffMerchant payout amounts updated with id: {}", cutOffMerchant.getId());
+            }
+        } catch (LockedException e) {
+            logger.error("Cannot acquire lock to create cutoff merchant {}-{}", authMessage.getMerchantId(), authMessage.getCurrencyId(), e);
+            throw new RuntimeException(e);
         }
     }
 
