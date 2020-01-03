@@ -19,7 +19,7 @@ public class LockService {
 
     public void lock(String key) {
         try {
-            Integer value = lockRepository.increment(RedisKeyGenerator.generateLockKey(key), 5, TimeUnit.SECONDS);
+            Integer value = lockRepository.increment(RedisKeyGenerator.generateLockKey(key), 5, TimeUnit.HOURS);
             if (!new Integer(1).equals(value)) {
                 throw new LockedException();
             }
