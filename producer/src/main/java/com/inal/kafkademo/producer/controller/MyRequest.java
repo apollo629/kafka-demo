@@ -2,12 +2,12 @@ package com.inal.kafkademo.producer.controller;
 
 public class MyRequest {
 
-    private Long merchantId;
-    private Long paymentId;
-    private String paymentConversationId;
-    private Long paymentTxId;
-    private String refundConversationId;
     private String status;
+    private String paymentConversationId;
+    private Long paymentId;
+    private Long paymentTxId;
+    private Long merchantId;
+    private String refundConversationId;
 
     public Long getMerchantId() {
         return merchantId;

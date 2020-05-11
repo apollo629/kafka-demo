@@ -1,6 +1,7 @@
 package com.inal.kafkademo.producer.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.MapperFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.inal.kafkademo.commons.Constants;
@@ -59,7 +60,7 @@ public class PaymentController {
     @ResponseStatus(HttpStatus.OK)
     public Response calculateHash(@RequestBody MyRequest request, HttpServletRequest httpServletRequest) {
         ObjectMapper objectMapper = new ObjectMapper();
-        objectMapper.configure(SerializationFeature.ORDER_MAP_ENTRIES_BY_KEYS, true);
+        objectMapper.configure(MapperFeature.SORT_PROPERTIES_ALPHABETICALLY, true);
         String json = "";
         try {
             json = objectMapper.writeValueAsString(request);
