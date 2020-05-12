@@ -9,7 +9,9 @@ import com.inal.kafkademo.commons.request.AuthRequest;
 import com.inal.kafkademo.commons.request.CancelRequest;
 import com.inal.kafkademo.commons.response.Response;
 import com.inal.kafkademo.producer.service.DefaultKafkaProducer;
-import org.apache.tomcat.util.codec.binary.Base64;
+import org.apache.commons.codec.binary.Base64;
+import org.apache.commons.codec.binary.StringUtils;
+import org.apache.commons.codec.digest.DigestUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -59,17 +61,21 @@ public class PaymentController {
     @PostMapping("/basic/test")
     @ResponseStatus(HttpStatus.OK)
     public Response calculateHash(@RequestBody MyRequest request, HttpServletRequest httpServletRequest) {
-        ObjectMapper objectMapper = new ObjectMapper();
-        objectMapper.configure(MapperFeature.SORT_PROPERTIES_ALPHABETICALLY, true);
-        String json = "";
-        try {
-            json = objectMapper.writeValueAsString(request);
-        } catch (JsonProcessingException e) {
-            e.printStackTrace();
-        }
-        logger.info(json);
-        logger.info("String used to calculate HASH:{}", request.getMerchantId() + "1" + json);
-        logger.info("Hash from request header: {} ", httpServletRequest.getHeader("Authorization"));
+        String stringToBeHash = new StringBuilder(request.getMerchantId().toString())
+                .append("1")
+                .append(request.getIyziEventType())
+                .append(request.getPaymentId())
+                .append(request.getPaymentTxId())
+                .append(request.getRefundConversationId())
+                .append(request.getStatus())
+                .toString();
+
+        logger.info("String used to calculate HASH: {}", stringToBeHash);
+        String hashFromHeader = httpServletRequest.getHeader("Authorization");
+        logger.info("Hash from request header: {}", hashFromHeader);
+        String generatedHash = Base64.encodeBase64String(DigestUtils.sha1(stringToBeHash));
+        logger.info("Generated Hash: {}", generatedHash);
+        logger.info("Hash comparision: {}", StringUtils.equals(hashFromHeader, generatedHash));
         return new Response();
     }
 }

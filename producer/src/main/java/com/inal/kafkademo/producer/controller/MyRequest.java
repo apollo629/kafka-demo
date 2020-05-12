@@ -2,12 +2,21 @@ package com.inal.kafkademo.producer.controller;
 
 public class MyRequest {
 
+    private String iyziEventType;
     private String status;
     private String paymentConversationId;
     private Long paymentId;
     private Long paymentTxId;
     private Long merchantId;
     private String refundConversationId;
+
+    public String getIyziEventType() {
+        return iyziEventType;
+    }
+
+    public void setIyziEventType(String iyziEventType) {
+        this.iyziEventType = iyziEventType;
+    }
 
     public Long getMerchantId() {
         return merchantId;
